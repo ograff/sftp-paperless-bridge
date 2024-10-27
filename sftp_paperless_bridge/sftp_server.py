@@ -8,16 +8,19 @@ from paramiko import (
     SFTPHandle,
     SFTPServerInterface,
 )
-from paramiko.common import AUTH_SUCCESSFUL, OPEN_SUCCEEDED
+from paramiko.common import AUTH_FAILED, AUTH_SUCCESSFUL, OPEN_SUCCEEDED
 from paramiko.sftp import SFTP_OP_UNSUPPORTED
 
 
 class MyServer(ServerInterface):
-    def check_auth_password(self, username: Any, password: Any) -> int:
-        # all are allowed
-        return AUTH_SUCCESSFUL
+    def __init__(self, password: str):
+        self.password = password
 
-    def check_channel_request(self, kind: Any, chanid: Any) -> int:
+    def check_auth_password(self, username: str, password: str) -> int:
+        # all are allowed
+        return AUTH_SUCCESSFUL if password == self.password else AUTH_FAILED
+
+    def check_channel_request(self, kind: str, chanid: int) -> int:
         return OPEN_SUCCEEDED
 
 
