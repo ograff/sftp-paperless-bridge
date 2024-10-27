@@ -10,6 +10,7 @@ from paramiko import (
 )
 from paramiko.common import AUTH_FAILED, AUTH_SUCCESSFUL, OPEN_SUCCEEDED
 from paramiko.sftp import SFTP_OP_UNSUPPORTED
+from typing_extensions import Buffer
 
 
 class MyServer(ServerInterface):
@@ -31,7 +32,12 @@ class MySFTPHandle(SFTPHandle):
         self.close_callback = close_callback
         super().__init__(flags)
 
+    def write(self, offset: int, data: Buffer) -> int:
+        print("Writing", len(data), "bytes to", self.name)  # type: ignore  # noqa: PGH003
+        return super().write(offset, data)
+
     def close(self) -> None:
+        print(f"close file {self.name}")
         self.close_callback(self.name, self.writefile.getvalue())
         self.writefile.close()
 
