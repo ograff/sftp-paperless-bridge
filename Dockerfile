@@ -18,4 +18,4 @@ RUN poetry install --no-interaction --no-ansi --no-root --no-dev
 # Copy Python code to the Docker image
 COPY sftp_paperless_bridge /code/sftp_paperless_bridge/
 
-CMD ["python", "sftp_paperless_bridge/main.py"]
+CMD ["poetry", "run", "sftp-paperless-bridge"]
