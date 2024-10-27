@@ -48,4 +48,10 @@ def create_sftp_server(close_callback: Callable[[str, bytes], None]) -> type[SFT
             fobj = MySFTPHandle(path, self.close_callback, flags)
             return fobj
 
+        def list_folder(self, path: str) -> list[SFTPAttributes] | int:
+            return []
+
+        def canonicalize(self, path: str) -> str:
+            return "/"
+
     return MySFTPServer

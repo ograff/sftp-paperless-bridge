@@ -1,3 +1,4 @@
+import logging
 import os
 import socket
 import time
@@ -11,6 +12,9 @@ from . import sftp_server
 
 
 def start_server(close_callback: Callable[[str, bytes], None], sftp_pass: str, key: None | str = None) -> None:
+    logging.basicConfig(level=logging.DEBUG)
+    paramiko_logger = logging.getLogger("paramiko")
+    paramiko_logger.setLevel(logging.DEBUG)
     server_key = paramiko.RSAKey.generate(bits=1024) if key is None else paramiko.RSAKey.from_private_key(StringIO(key))
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
