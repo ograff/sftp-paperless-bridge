@@ -1,2 +1,2 @@
-# def test_sftp_server():
-#     handle = sftp_server.MySFTPHandle("foo", )
+def test_nothing() -> None:
+    pass
