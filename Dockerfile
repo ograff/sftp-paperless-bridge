@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.9-slim-buster
+FROM python:3.13-slim-buster
 
-ENV POETRY_VERSION=1.4 \
+ENV POETRY_VERSION=1.8.4 \
     POETRY_VIRTUALENVS_CREATE=false
 
 # Install poetry
@@ -18,4 +18,4 @@ RUN poetry install --no-interaction --no-ansi --no-root --no-dev
 # Copy Python code to the Docker image
 COPY sftp_paperless_bridge /code/sftp_paperless_bridge/
 
-CMD [ "python", "sftp_paperless_bridge/foo.py"]
+CMD ["python", "sftp_paperless_bridge/main.py"]
