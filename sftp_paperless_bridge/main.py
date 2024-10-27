@@ -20,7 +20,7 @@ def start_server(close_callback: Callable[[str, bytes], None], sftp_pass: str, k
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
     server_socket.bind(("0.0.0.0", 2222))
     server_socket.listen(10)
-    sessions = []
+    sessions: list[paramiko.Transport] = []
     while True:
         sessions = [session for session in sessions if session.is_active()]
         conn, addr = server_socket.accept()
