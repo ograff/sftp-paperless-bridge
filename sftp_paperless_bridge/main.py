@@ -1,7 +1,6 @@
 import logging
 import os
 import socket
-import time
 from io import StringIO
 from typing import Callable
 
@@ -21,7 +20,9 @@ def start_server(close_callback: Callable[[str, bytes], None], sftp_pass: str, k
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
     server_socket.bind(("0.0.0.0", 2222))
     server_socket.listen(10)
+    sessions = []
     while True:
+        sessions = [session for session in sessions if session.is_active()]
         conn, addr = server_socket.accept()
         transport = paramiko.Transport(conn)
         transport.add_server_key(server_key)
@@ -29,8 +30,7 @@ def start_server(close_callback: Callable[[str, bytes], None], sftp_pass: str, k
         server = sftp_server.MyServer(password=sftp_pass)
         transport.start_server(server=server)
         _channel = transport.accept()
-        while transport.is_active():
-            time.sleep(1)
+        sessions.append(transport)
 
 
 def create_upload_handler(api_key: str, url: str) -> Callable[[str, bytes], None]:
